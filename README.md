@@ -2,7 +2,7 @@
 
 Script for finding and removing duplicate archived Youtube videos.  
 
-##**Files must end in their video_id and be .mkv**  
+## **Files must end in their video_id and be .mkv**  
 You can alter which extention the script looks for in the code by replacing all instances of '.mkv' with your desired extention.
 
 
