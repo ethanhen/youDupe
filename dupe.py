@@ -22,7 +22,7 @@ def query(question, default = "yes"):
 	elif default == "no":
 		prompt = " [y/N] "
 	else:
-		raise ValueError("invalid default answer: '%s'" % default)
+		raise ValueError("Invalid default answer: '%s'" % default)
 
 	while True:
 		sys.stdout.write(question + prompt)
@@ -41,6 +41,8 @@ def checkDelete(match, autoaccept, trial):
 	if (os.path.getsize(str(match[0])) > os.path.getsize(str(match[1]))):
 		if trial:
 			print("Remove " + str(match[1]))
+			totalFilesDeleted += 1
+			totalBytesDeleted += os.path.getsize(str(match[1]))
 		elif autoaccept:
 			totalFilesDeleted += 1
 			totalBytesDeleted += os.path.getsize(str(match[1]))
@@ -57,6 +59,8 @@ def checkDelete(match, autoaccept, trial):
 	elif (os.path.getsize(str(match[0])) < os.path.getsize(str(match[1]))):
 		if trial:
 			print("Remove " + str(match[0]))
+			totalFilesDeleted += 1
+			totalBytesDeleted += os.path.getsize(str(match[0]))
 		elif autoaccept:
 			totalFilesDeleted += 1
 			totalBytesDeleted += os.path.getsize(str(match[0]))
@@ -72,6 +76,8 @@ def checkDelete(match, autoaccept, trial):
 	elif (os.path.getsize(str(match[0])) == os.path.getsize(str(match[1]))):
 		if trial:
 			print("Remove " + str(match[1]))
+			totalFilesDeleted += 1
+			totalBytesDeleted += os.path.getsize(str(match[1]))
 		elif autoaccept:
 			totalFilesDeleted += 1
 			totalBytesDeleted += os.path.getsize(str(match[1]))
@@ -147,18 +153,20 @@ def main(argv):
 		# elif opt in ("-x", "--exclude"):
 		# 	excluded = arg
 
-	# outputfile = open('duplicates.txt', 'w')
 	outputList = list()
 
 	navigate(root, outputList, autoaccept, trial)
 
-	print("Total files deleted:\t" + str(totalFilesDeleted))
-	print("Total space saved:\t" + convert_size(totalBytesDeleted))
+	if totalBytesDeleted > 0:
+		if trial:
+			print("Total files to be deleted:\t" + str(totalFilesDeleted))
+			print("Total space to be saved:\t" + convert_size(totalBytesDeleted))
+		else:
+			print("Total files deleted:\t" + str(totalFilesDeleted))
+			print("Total space saved:\t" + convert_size(totalBytesDeleted))
+	else:
+		print("No duplicates found!")
 
-	# for file in outputList:
-	# 	outputfile.write(file + "\n")
-
-	# outputfile.close()
 
 if __name__ == '__main__':
 	main(sys.argv[1:])
